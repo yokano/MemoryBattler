@@ -1,0 +1,18 @@
+application: memory-battler
+version: 0-0-0
+runtime: go
+api_version: go1
+
+includes:
+- game/ultrarich
+
+handlers:
+- url: /jquery
+  static_dir: library/jquery
+- url: /enchant.js
+  static_files: library/enchant.js
+  upload: library/enchant.js
+- url: /library/matching
+  static_dir: library/matching
+- url: /(.*)
+  script: _go_app

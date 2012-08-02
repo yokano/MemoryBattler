@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable">
+		<title>Ultrarich</title>
+		<link rel="stylesheet" type="text/css" href="/jquery/jquery.mobile-1.1.0.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="/ultrarich.css"></link>
+		<script src="/jquery/jquery-1.7.2.min.js"></script>
+		<script src="/jquery/jquery.mobile-1.1.0.min.js"></script>
+		<script src="/enchant.js"></script>
+		<script src="/ultrarich.js"></script>
+	</head>
+	<body>
+	
+		<section id="top" data-role="dialog">
+			<header data-role="header"><h1>大富豪の設定</h1></header>
+			<div data-role="content">
+				<form id="config">
+					<label for="maxplayer">最大人数</label>
+					<select id="maxplayer" name="maxplayer" data-inline="true">
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+					</select>
+					<fieldset data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" data-transition="flip">
+						<legend>ジョーカーの枚数</legend>
+						<input type="radio" class="joker" id="joker0" name="joker" value="0"/>
+						<label for="joker0">０枚</label>
+						<input type="radio" class="joker" id="joker1" name="joker" value="1"/>
+						<label for="joker1">１枚</label>
+						<input type="radio" class="joker" id="joker2" name="joker" value="2" checked/>
+						<label for="joker2">２枚</label>
+					</fieldset>
+					<input type="button" id="fix_config" value="決定" data-inline="true" data-theme="b"></input>
+					<a href="/gamelist" data-role="button" data-inline="true">キャンセル</a>
+				</form>
+			</div>
+		</section>
+		
+		{{.Matching}}
+		
+		<section id="game" data-role="page" data-theme="c">
+			<div class="card"></div>
+		</section>
+	</body>
+</html>

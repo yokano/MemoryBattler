@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card
+END
+createcard.html
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/createcard.html
+END
+createcard.go
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/createcard.go
+END
+editcard.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/editcard.html
+END
+editcard.go
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/editcard.go
+END
+cardlist.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/cardlist.html
+END
+cardlist.go
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/TSK/!svn/ver/225/trunk/lgc_gae/page/cardset/card/cardlist.go
+END

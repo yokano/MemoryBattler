@@ -1,0 +1,9 @@
+handlers:
+- url: /ultrarich/img
+  static_dir: game/ultrarich/img
+- url: /ultrarich.js
+  static_files: game/ultrarich/ultrarich.js
+  upload: game/ultrarich/ultrarich.js
+- url: /ultrarich.css
+  static_files: game/ultrarich/ultrarich.css
+  upload: game/ultrarich/ultrarich.css
