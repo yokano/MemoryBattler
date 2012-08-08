@@ -51,7 +51,7 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 	
 	// メモリにプレイヤーを追加してチャネルトークンを返す
 	actions["join"] = func() {
-		memcache.AddPlayer(c, client.id)
+		memcache.AddPlayer(c, client.id, client.name)
 		message := map[string]string{"token":client.token, "id":client.id}
 		result,err := json.Marshal(message)
 		if err != nil {

@@ -8,6 +8,7 @@
 package library
 
 import (
+	"appengine"
 	"text/template"
 	"net/http"
 	"time"
@@ -15,7 +16,7 @@ import (
 )
 
 /*
-	関数 Output()
+	関数 Output(path, material)
 	- HTMLテンプレートにデータを置換してクライアントへ出力する
 
 	引数
@@ -48,4 +49,21 @@ func Output(w http.ResponseWriter, path string, material map[string]string) {
 func CreateId() string {
 	now := time.Now()
 	return fmt.Sprintf("%06d", (now.UnixNano() / 1000) % 1000000)
+}
+
+/*
+	関数 Check(c, err)
+	- エラーが発生していたらコンソールへ出力する
+	
+	引数
+	- c : コンソール出力用コンテキスト
+	- err : error型　他の関数から渡されるエラー変数
+	
+	戻り値
+	- なし
+*/
+func Check(c appengine.Context, err error) {
+	if err != nil {
+		c.Errorf(err.Error())
+	}
 }
