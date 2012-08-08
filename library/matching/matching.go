@@ -35,9 +35,7 @@ func newClient(context appengine.Context, r *http.Request) *Client {
 	
 	var err error
 	c.token,err = channel.Create(context, c.id)
-	if err != nil {
-		context.Debugf(err.Error())
-	}
+	Check(context, err)
 	return c
 }
 
@@ -54,9 +52,7 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 		memcache.AddPlayer(c, client.id, client.name)
 		message := map[string]string{"token":client.token, "id":client.id}
 		result,err := json.Marshal(message)
-		if err != nil {
-			c.Debugf(err.Error())
-		}
+		Check(c, err)
 		w.Write(result)
 	}
 	

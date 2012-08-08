@@ -27,10 +27,7 @@ import (
 	- なし : クライアントの画面にHTMLを出力
 */
 func Output(w http.ResponseWriter, path string, material map[string]string) {
-	tmpl,err := template.ParseFiles(path)
-	if err != nil {
-		err.Error()
-	}
+	tmpl,_ := template.ParseFiles(path)
 	tmpl.Execute(w, material)
 }
 
