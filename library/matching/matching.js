@@ -26,10 +26,12 @@ var view = {
 }
 
 var ajax = {
+	status: "",
 	join: function() {
 		$.ajax({
 			url:"/matching",
 			type:"GET",
+			async: false,
 			data:{
 				gamekey:"test",
 				name:player.name,
@@ -45,20 +47,20 @@ var ajax = {
 				player.id = data.id;
 				console.log(player.id);
 				socket.onmessage = function() {
-					alert("MESSAGE")
+					console.log("on message")
 				};
 				socket.onerror = function() {
-					alert("ERROR")	
+					console.log("socket error")
 				};
-				$(window).bind("unload", ajax.leave);
+				ajax.status = "joined"
 			}
 		})
 	},
 	leave: function() {
 		$.ajax({
-			async: false,
 			url:"/matching",
 			type:"GET",
+			async: false,
 			data:{
 				gamekey: "test",
 				action: "leave",
@@ -70,6 +72,26 @@ var ajax = {
 			},
 			success: function() {
 				socket.close();
+				ajax.status = "left";
+			}
+		});
+	},
+	get: function() {
+		$.ajax({
+			url:"/matching",
+			type:"GET",
+			data:{
+				gamekey: "test",
+				action: "get",
+				id: player.id
+			},
+			dataType: "json",
+			error: function() {
+				console.log("ユーザ取得時にエラー");
+			},
+			success: function(data) {
+				console.log("ユーザ取得成功");
+				console.log(data);
 			}
 		});
 	}
@@ -80,4 +102,8 @@ $(function() {
 	player.inputName();
 	view.create();
 	ajax.join();
+	if(ajax.status == "joined") {
+		$(window).bind("unload", ajax.leave);
+		ajax.get();
+	}
 });

@@ -61,6 +61,11 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 		memcache.DeletePlayer(c, client.id)
 	}
 	
+	// ユーザ一覧を返す
+	actions["get"] = func() {
+		w.Write(memcache.GetPlayersJson(c))
+	}
+	
 	if client.action == "" {
 		Output(w, "library/matching/matching.html", make(map[string]string))
 	} else {

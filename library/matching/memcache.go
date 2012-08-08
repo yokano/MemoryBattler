@@ -46,12 +46,12 @@ func (m *Memcache) DeletePlayer(c appengine.Context, id string) {
 	prevPlayers := m.GetPlayers(c)
 	nextPlayers := []map[string]string{}
 	for i := range prevPlayers {
-		if(prevPlayers[i]["id"] == id) {
-			continue
+		if(prevPlayers[i]["id"] != id) {
+			nextPlayers = append(nextPlayers, prevPlayers[i])
 		}
-		nextPlayers = append(nextPlayers, prevPlayers[i])
 	}
 	m.SetPlayers(c, nextPlayers)
+	c.Debugf("DeletePlayer")
 }
 
 /*
@@ -67,6 +67,16 @@ func (m *Memcache) GetPlayers(c appengine.Context) []map[string]string {
 	Check(c, err)
 	
 	return players
+}
+
+/*
+	GetPlayersJson(c)
+	メモリ上のプレイヤー一覧をJSON形式で取得する
+*/
+func (m *Memcache) GetPlayersJson(c appengine.Context) []byte {
+	memory,err := memcache.Get(c, m.config.gamekey)
+	Check(c, err)
+	return memory.Value
 }
 
 /*
