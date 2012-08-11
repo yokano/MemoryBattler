@@ -13,6 +13,9 @@ import (
 	"net/http"
 	"time"
 	"fmt"
+	"encoding/json"
+	"appengine/memcache"
+	"appengine/channel"
 )
 
 /*
@@ -62,5 +65,38 @@ func CreateId() string {
 func Check(c appengine.Context, err error) {
 	if err != nil {
 		c.Errorf(err.Error())
+	}
+}
+
+/*
+	関数 Message(gamekey, message)
+	- ゲームの参加者全員にメッセージを送信する
+*/
+func Message(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	gamekey := r.FormValue("gamekey")
+	message := r.FormValue("message")
+	
+	c.Debugf("GAMEKEY:%s", gamekey)
+	c.Debugf("MESSAGE:%s", message)
+	
+	memory, err := memcache.Get(c, gamekey)
+	Check(c, err)
+	value := memory.Value
+
+	players := []map[string]string{}
+	msg := map[string]string{}
+	json.Unmarshal(value, &players)
+	json.Unmarshal([]byte(message), &msg)
+
+	c.Debugf("FROM:%s", msg["id"])
+	c.Debugf("CONTENT:%s", msg["content"])
+	
+	for i := range players {
+		c.Debugf("target:" + players[i]["id"] + " from:" + msg["id"])
+		if players[i]["id"] != msg["id"] {
+			c.Debugf("SEND")
+			channel.Send(c, players[i]["id"], msg["content"])
+		}
 	}
 }

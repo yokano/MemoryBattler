@@ -37,6 +37,7 @@ func init() {
 	http.HandleFunc("/gamelist", Gamelist)
 	http.HandleFunc("/manual", Manual)
 	http.HandleFunc("/setting", Setting)
+	http.HandleFunc("/message", Message)
 	
 	// games
 	http.HandleFunc("/ultrarich", Ultrarich)

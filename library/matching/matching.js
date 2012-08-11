@@ -22,11 +22,22 @@ var view = {
 		for(var i = 1; i < config.maxplayer; i++) {
 			$("#players").append('<div class="player"><img class="icon" src="' + this.icons.none + '"/><span class="name">空席</span></div>');
 		}
+	},
+	update: function(players) {
+		$("#players").empty();
+		for(var i = 0; i < config.maxplayer; i++) {
+			$("#players").append('<div class="player"><img class="icon" src="' + this.icons.none + '"/><span class="name">空席</span></div>');
+		}
+		for(i = 0; i < players.length; i++) {
+			$(".icon:eq(" + i + ")").attr("src", this.icons.human);
+			$(".name:eq(" + i + ")").html(players[i].name);
+		}
 	}
 }
 
 var ajax = {
 	status: "",
+	socket: null,
 	join: function() {
 		$.ajax({
 			url:"/matching",
@@ -43,13 +54,13 @@ var ajax = {
 			},
 			success:function(data) {
 				var channel = new goog.appengine.Channel(data.token);
-				var socket = channel.open();
+				ajax.socket = channel.open();
 				player.id = data.id;
 				console.log(player.id);
-				socket.onmessage = function() {
-					console.log("on message")
+				ajax.socket.onmessage = function() {
+					ajax.get();
 				};
-				socket.onerror = function() {
+				ajax.socket.onerror = function() {
 					console.log("socket error")
 				};
 				ajax.status = "joined"
@@ -71,8 +82,9 @@ var ajax = {
 				console.log("退室時にエラー");
 			},
 			success: function() {
-				socket.close();
+				ajax.socket.close();
 				ajax.status = "left";
+				ajax.message({id:player.id, content:"update"})
 			}
 		});
 	},
@@ -89,9 +101,27 @@ var ajax = {
 			error: function() {
 				console.log("ユーザ取得時にエラー");
 			},
-			success: function(data) {
+			success: function(players) {
 				console.log("ユーザ取得成功");
-				console.log(data);
+				console.log(players);
+				view.update(players);
+			}
+		});
+	},
+	message: function(message) {
+		$.ajax({
+			url: "/message",
+			type: "POST",
+			data: {
+				gamekey: config.gamekey,
+				"message": JSON.stringify(message)
+			},
+			dataType: "json",
+			error: function() {
+				console.log("メッセージ送信時にエラー");
+			},
+			success: function() {
+				console.log("send message");
 			}
 		});
 	}
@@ -105,5 +135,6 @@ $(function() {
 	if(ajax.status == "joined") {
 		$(window).bind("unload", ajax.leave);
 		ajax.get();
+		ajax.message({"id":player.id, "content":"update"});
 	}
 });

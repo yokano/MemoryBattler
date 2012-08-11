@@ -3,6 +3,9 @@ version: 0-0-0
 runtime: go
 api_version: go1
 
+inbound_services:
+- channel_presence
+
 includes:
 - game/ultrarich
 
