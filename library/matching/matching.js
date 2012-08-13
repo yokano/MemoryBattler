@@ -3,7 +3,8 @@ var player = {
 	id: "",
 	inputName: function() {
 		this.name = prompt("名前を入力してください");
-	}
+	},
+	host:false
 }
 
 var view = {
@@ -24,6 +25,9 @@ var view = {
 	},
 	full: function() {
 		$(":jqmData(role=content)").empty().html("満室のため入室できませんでした。");
+	},
+	hostOnly: function() {
+		$(".host_only").show();
 	}
 }
 
@@ -85,9 +89,11 @@ var ajax = {
 		});
 	},
 	get: function() {
+		var result = null;
 		$.ajax({
 			url:"/matching",
 			type:"GET",
+			async: false,
 			data:{
 				gamekey: "test",
 				action: "get",
@@ -100,9 +106,10 @@ var ajax = {
 			success: function(players) {
 				console.log("ユーザ取得成功");
 				console.log(players);
-				view.update(players);
+				result = players;
 			}
 		});
+		return result;
 	},
 	message: function(message) {
 		$.ajax({
@@ -131,7 +138,12 @@ $(function() {
 		view.full();
 	} else if(ajax.status == "joined") {
 		$(window).bind("unload", ajax.leave);
-		ajax.get();
+		var players = ajax.get();
+		if(players.length == 1) {
+			player.host = true;
+			view.hostOnly();
+		}
+		view.update(players);
 		ajax.message({"id":player.id, "content":"update"});
 	}
 });
