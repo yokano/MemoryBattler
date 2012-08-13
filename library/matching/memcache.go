@@ -15,9 +15,9 @@ type Memcache struct {
 func newMemcache(c appengine.Context, config *Config) *Memcache {
 	m := new(Memcache)
 	m.config = config
-	_,err := memcache.Get(c, m.config.gamekey)
+	_,err := memcache.Get(c, m.config.Gamekey)
 	if err != nil {
-		memcache.Set(c, &memcache.Item{ Key: m.config.gamekey, Value: []byte("") })
+		memcache.Set(c, &memcache.Item{ Key: m.config.Gamekey, Value: []byte("") })
 	}
 	return m
 }
@@ -59,7 +59,7 @@ func (m *Memcache) DeletePlayer(c appengine.Context, id string) {
 	メモリ上のプレイヤー一覧を取得する
 */
 func (m *Memcache) GetPlayers(c appengine.Context) []map[string]string {
-	memory,err := memcache.Get(c, m.config.gamekey)
+	memory,err := memcache.Get(c, m.config.Gamekey)
 	Check(c, err)
 	
 	players := []map[string]string{}
@@ -74,7 +74,7 @@ func (m *Memcache) GetPlayers(c appengine.Context) []map[string]string {
 	メモリ上のプレイヤー一覧をJSON形式で取得する
 */
 func (m *Memcache) GetPlayersJson(c appengine.Context) []byte {
-	memory,err := memcache.Get(c, m.config.gamekey)
+	memory,err := memcache.Get(c, m.config.Gamekey)
 	Check(c, err)
 	return memory.Value
 }
@@ -86,5 +86,5 @@ func (m *Memcache) GetPlayersJson(c appengine.Context) []byte {
 func (m *Memcache) SetPlayers(c appengine.Context, players []map[string]string) {
 	value,err := json.Marshal(players)
 	Check(c, err)
-	memcache.Set(c, &memcache.Item{Key: m.config.gamekey, Value: value})
+	memcache.Set(c, &memcache.Item{Key: m.config.Gamekey, Value: value})
 }

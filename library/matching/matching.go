@@ -10,8 +10,8 @@ import (
 
 // Config
 type Config struct {
-	maxplayer int
-	gamekey string
+	Maxplayer int
+	Gamekey string
 }
 
 
@@ -49,7 +49,7 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 	
 	// メモリにプレイヤーを追加してチャネルトークンを返す
 	actions["join"] = func() {
-		if len(memcache.GetPlayers(c)) < config.maxplayer {
+		if len(memcache.GetPlayers(c)) < config.Maxplayer {
 			memcache.AddPlayer(c, client.id, client.name)
 			message := map[string]string{"token":client.token, "id":client.id}
 			result,err := json.Marshal(message)
@@ -69,7 +69,7 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 	}
 	
 	if client.action == "" {
-		Output(w, "library/matching/matching.html", make(map[string]string))
+		Output(w, "library/matching/matching.html", config)
 	} else {
 		actions[client.action]()
 	}

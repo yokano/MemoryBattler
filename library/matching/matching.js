@@ -1,8 +1,3 @@
-var config = {
-	maxplayer: 4,
-	gamekey: "test"
-}
-
 var player = {
 	name: "",
 	id: "",
@@ -129,7 +124,7 @@ var ajax = {
 }
 
 // entry
-$(function() {	
+$(function() {
 	player.inputName();
 	ajax.join();
 	if(ajax.status == "full") {

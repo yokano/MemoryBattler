@@ -29,7 +29,7 @@ import (
 	戻り値
 	- なし : クライアントの画面にHTMLを出力
 */
-func Output(w http.ResponseWriter, path string, material map[string]string) {
+func Output(w http.ResponseWriter, path string, material interface{}) {
 	tmpl,_ := template.ParseFiles(path)
 	tmpl.Execute(w, material)
 }
