@@ -32,6 +32,9 @@ var view = {
 			$(".icon:eq(" + i + ")").attr("src", this.icons.human);
 			$(".name:eq(" + i + ")").html(players[i].name);
 		}
+	},
+	full: function() {
+		$(":jqmData(role=content)").empty().html("満室のため入室できませんでした。");
 	}
 }
 
@@ -53,6 +56,10 @@ var ajax = {
 				console.log("部屋参加時にエラー");
 			},
 			success:function(data) {
+				if(data == null) {
+					ajax.status = "full";
+					return;
+				}
 				var channel = new goog.appengine.Channel(data.token);
 				ajax.socket = channel.open();
 				player.id = data.id;
@@ -128,11 +135,13 @@ var ajax = {
 }
 
 // entry
-$(function() {
+$(function() {	
 	player.inputName();
-	view.create();
 	ajax.join();
-	if(ajax.status == "joined") {
+	if(ajax.status == "full") {
+		view.full();
+	} else if(ajax.status == "joined") {
+		view.create();
 		$(window).bind("unload", ajax.leave);
 		ajax.get();
 		ajax.message({"id":player.id, "content":"update"});

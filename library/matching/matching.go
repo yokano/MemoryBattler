@@ -10,7 +10,7 @@ import (
 
 // Config
 type Config struct {
-	maxplayer uint8
+	maxplayer int
 	gamekey string
 }
 
@@ -39,7 +39,7 @@ func newClient(context appengine.Context, r *http.Request) *Client {
 	return c
 }
 
-func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer uint8) {
+func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer int) {
 	c := appengine.NewContext(r)
 	client := newClient(c, r)
 	config := Config{maxplayer, gamekey}
@@ -49,11 +49,13 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 	
 	// メモリにプレイヤーを追加してチャネルトークンを返す
 	actions["join"] = func() {
-		memcache.AddPlayer(c, client.id, client.name)
-		message := map[string]string{"token":client.token, "id":client.id}
-		result,err := json.Marshal(message)
-		Check(c, err)
-		w.Write(result)
+		if len(memcache.GetPlayers(c)) < config.maxplayer {
+			memcache.AddPlayer(c, client.id, client.name)
+			message := map[string]string{"token":client.token, "id":client.id}
+			result,err := json.Marshal(message)
+			Check(c, err)
+			w.Write(result)
+		}
 	}
 	
 	// メモリからプレイヤーを削除
