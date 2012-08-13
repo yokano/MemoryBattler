@@ -17,12 +17,6 @@ var view = {
 		human: "/ultrarich/img/human.png",
 		cpu: "/ultrarich/img/cpu.png"
 	},
-	create: function() {
-		$("#players").append($('<div class="player"><img class="icon" src="' + this.icons.human + '"/><span class="name">' + player.name + '</span></div>'));
-		for(var i = 1; i < config.maxplayer; i++) {
-			$("#players").append('<div class="player"><img class="icon" src="' + this.icons.none + '"/><span class="name">空席</span></div>');
-		}
-	},
 	update: function(players) {
 		$("#players").empty();
 		for(var i = 0; i < config.maxplayer; i++) {
@@ -141,7 +135,6 @@ $(function() {
 	if(ajax.status == "full") {
 		view.full();
 	} else if(ajax.status == "joined") {
-		view.create();
 		$(window).bind("unload", ajax.leave);
 		ajax.get();
 		ajax.message({"id":player.id, "content":"update"});
