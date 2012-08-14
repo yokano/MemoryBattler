@@ -5,11 +5,40 @@ import(
 	"appengine"
 	"appengine/datastore"
 	. "library"
+	. "library/matching"
 )
 
 func Creategame(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	
+	if r.FormValue("mode") == "create" {
+		create(c, w, r)
+	} else {
+		input(c, w, r)
+	}
+}
+
+// 新規ゲームを datastore へ追加
+func create(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
+	cardsetKey := r.FormValue("cardset")
+	ruleKey := r.FormValue("rule")
+	if name != "" && cardsetKey != "" && ruleKey != "" {
 		
+		// datastoreへゲームを登録
+		game := new(Game)
+		game.Name = name
+		game.Cardset,_ = datastore.DecodeKey(cardsetKey)
+		game.Rule,_ = datastore.DecodeKey(ruleKey)
+		gamekey,_ := datastore.Put(c, datastore.NewIncompleteKey(c, "Game", nil), game)
+		
+		// マッチング画面を表示　マッチング完了後は play.go へ
+		Matching(w, r, gamekey.Encode(), 2)
+	}
+}
+
+// 新規ゲームの情報入力
+func input(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	// create html template
 	material := make(map[string]string)
 

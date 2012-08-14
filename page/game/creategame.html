@@ -15,7 +15,7 @@
 				<h1>新しいゲームを作成する</h1>
 			</header>
 			<div class="content" data-role="content" data-theme="d">
-				<form action="/play" method="post" data-ajax="false">
+				<form action="/creategame" method="post" data-ajax="false">
 					部屋名：<input name="name" type="text"></input>
 					ゲームルール：
 					<select name="rule">
@@ -26,6 +26,7 @@
 						{{.Cardsets}}
 					</select>
 					<input type="submit" value="決定" data-inline="true" data-theme="b"></input>
+					<input type="hidden" name="mode" value="create"></input>
 					<a data-role="button" data-inline="true" href="/gamelist">キャンセル</a>
 				</form>
 			</div>

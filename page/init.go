@@ -33,24 +33,22 @@ func init() {
 	http.HandleFunc("/createcard", Createcard)
 	http.HandleFunc("/creategame", Creategame)
 	http.HandleFunc("/editcard", Editcard)
-	http.HandleFunc("/play", Play)
 	http.HandleFunc("/gamelist", Gamelist)
 	http.HandleFunc("/manual", Manual)
 	http.HandleFunc("/setting", Setting)
 	http.HandleFunc("/message", Message)
+	http.HandleFunc("/play", Play)
+	http.HandleFunc("/matching", func(w http.ResponseWriter, r *http.Request){
+		Matching(w, r, r.FormValue("gamekey"), 2)
+	})
 	
 	// games
 	http.HandleFunc("/ultrarich", Ultrarich)
 	
 	// debug
 	http.HandleFunc("/setup", Setup)
-	http.HandleFunc("/debug", Debug)
-	http.HandleFunc("/matching", Debug)
 }
 
-func Debug(w http.ResponseWriter, r *http.Request) {
-	Matching(w, r, "test", 2)
-}
 
 func Setup(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)

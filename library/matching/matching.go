@@ -14,7 +14,6 @@ type Config struct {
 	Gamekey string
 }
 
-
 // Client
 type Client struct {
 	name string

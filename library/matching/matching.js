@@ -40,7 +40,7 @@ var ajax = {
 			type:"GET",
 			async: false,
 			data:{
-				gamekey:"test",
+				gamekey:config.gamekey,
 				name:player.name,
 				action:"join"
 			},
@@ -58,7 +58,8 @@ var ajax = {
 				player.id = data.id;
 				console.log(player.id);
 				ajax.socket.onmessage = function() {
-					ajax.get();
+					console.log("get message");
+					view.update(ajax.get());
 				};
 				ajax.socket.onerror = function() {
 					console.log("socket error")
@@ -73,7 +74,7 @@ var ajax = {
 			type:"GET",
 			async: false,
 			data:{
-				gamekey: "test",
+				gamekey: config.gamekey,
 				action: "leave",
 				id: player.id
 			},
@@ -85,6 +86,7 @@ var ajax = {
 				ajax.socket.close();
 				ajax.status = "left";
 				ajax.message({id:player.id, content:"update"})
+				console.log("leave");
 			}
 		});
 	},
@@ -95,7 +97,7 @@ var ajax = {
 			type:"GET",
 			async: false,
 			data:{
-				gamekey: "test",
+				gamekey: config.gamekey,
 				action: "get",
 				id: player.id
 			},
@@ -137,7 +139,7 @@ $(function() {
 	if(ajax.status == "full") {
 		view.full();
 	} else if(ajax.status == "joined") {
-		$(window).bind("unload", ajax.leave);
+		$(window).bind("beforeunload", ajax.leave);
 		var players = ajax.get();
 		if(players.length == 1) {
 			player.host = true;
