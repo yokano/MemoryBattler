@@ -63,8 +63,10 @@ func (m *Memcache) GetPlayers(c appengine.Context) []map[string]string {
 	Check(c, err)
 	
 	players := []map[string]string{}
-	err = json.Unmarshal(memory.Value, &players)
-	Check(c, err)
+	if( (string)(memory.Value) != "") {
+		err = json.Unmarshal(memory.Value, &players)
+		Check(c, err)
+	}
 	
 	return players
 }

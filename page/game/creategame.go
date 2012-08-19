@@ -10,10 +10,11 @@ import(
 
 func Creategame(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	mode := r.FormValue("mode")
 	
-	if r.FormValue("mode") == "create" {
+	if mode == "create" {
 		create(c, w, r)
-	} else {
+	} else if mode == "input" {
 		input(c, w, r)
 	}
 }

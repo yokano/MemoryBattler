@@ -1,36 +1,21 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width,user-scalable=no">
-		<meta name="apple-mobile-web-app-capable">
-		<title>Matching</title>
-		<link rel="stylesheet" type="text/css" href="/jquery/jquery.mobile-1.1.0.min.css"></link>
-		<link rel="stylesheet" type="text/css" href="/ultrarich.css"></link>
-		<script src="/jquery/jquery-1.7.2.min.js"></script>
-		<script src="/jquery/jquery.mobile-1.1.0.min.js"></script>
-		<script>
-			var config = {
-				maxplayer: {{.Maxplayer}},
-				gamekey: "{{.Gamekey}}"
-			};
-		</script>
-		<script src="/library/matching/matching.js"></script>
-		<script type="text/javascript" src="/_ah/channel/jsapi"></script>
-	</head>
-	<body>
-		<section id="wait" data-role="dialog">
-			<header data-role="header"><h1>参加者募集中</h1></header>
-			<div data-role="content">
-				空席タップするとCPUを入れることができます
-				<div id="players">
-				</div>
-				<div class="host_only" style="display:none">
-					<hr>
-					<a type="button" href="/play" id="start" data-inline="true" data-theme="b">スタート</a>
-					<a href="/gamelist" data-role="button" data-inline="true">キャンセル</a>
-				</div>
-			</div>
-		</section>
-	</body>
-</html>
+<section id="wait" data-role="dialog">
+	<script src="/_ah/channel/jsapi"></script>
+	<script>
+		var config = {
+			maxplayer: {{.Maxplayer}},
+			gamekey: "{{.Gamekey}}"
+		};
+	</script>
+	<script src="/library/matching/matching.js"></script>
+	<header data-role="header"><h1>参加者募集中</h1></header>
+	<div data-role="content">
+		空席タップするとCPUを入れることができます
+		<div id="players">
+		</div>
+		<div class="host_only" style="display:none">
+			<hr>
+			<a type="button" href="/play" id="start" data-inline="true" data-theme="b">スタート</a>
+			<a href="/gamelist" data-role="button" data-inline="true">キャンセル</a>
+		</div>
+	</div>
+</section>

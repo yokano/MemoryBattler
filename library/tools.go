@@ -77,9 +77,6 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	gamekey := r.FormValue("gamekey")
 	message := r.FormValue("message")
 	
-	c.Debugf("GAMEKEY:%s", gamekey)
-	c.Debugf("MESSAGE:%s", message)
-	
 	memory, err := memcache.Get(c, gamekey)
 	Check(c, err)
 	value := memory.Value
@@ -87,16 +84,13 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	players := []map[string]string{}
 	msg := map[string]string{}
 	json.Unmarshal(value, &players)
-	json.Unmarshal([]byte(message), &msg)
-
-	c.Debugf("FROM:%s", msg["id"])
-	c.Debugf("CONTENT:%s", msg["content"])
+	json.Unmarshal(([]byte)(message), &msg)
 	
 	for i := range players {
-		c.Debugf("target:" + players[i]["id"] + " from:" + msg["id"])
 		if players[i]["id"] != msg["id"] {
-			c.Debugf("SEND")
-			channel.Send(c, players[i]["id"], msg["content"])
+			c.Debugf(msg["id"] + "->" + players[i]["id"] + " : " + msg["content"])
+			err := channel.Send(c, players[i]["id"], msg["content"])
+			Check(c, err)
 		}
 	}
 }

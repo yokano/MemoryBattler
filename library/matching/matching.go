@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"appengine"
 	"appengine/channel"
+	"appengine/datastore"
 )
 
 // Config
@@ -60,6 +61,11 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 	// メモリからプレイヤーを削除
 	actions["leave"] = func() {
 		memcache.DeletePlayer(c, client.id)
+
+		if len(memcache.GetPlayers(c)) == 0 {
+			_,err := datastore.DecodeKey(gamekey)
+			Check(c, err)
+		}
 	}
 	
 	// ユーザ一覧を返す

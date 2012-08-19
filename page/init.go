@@ -52,6 +52,7 @@ func init() {
 
 func Setup(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	c.Debugf("setup start")
 	rule := new(Rule)
 	rule.Name = "ばばぬき"
 	rule.Path = "/oldmaid"
@@ -68,4 +69,3 @@ func Setup(w http.ResponseWriter, r *http.Request) {
 	c.Debugf("セットアップ完了")
 	http.Redirect(w, r, "/top", 303)
 }
-

@@ -3,7 +3,10 @@
 	データモデルの定義
 */
 package library
-import "appengine/datastore"
+import (
+	"appengine"
+	"appengine/datastore"
+)
 
 const(
 	SETUP = 1
@@ -17,6 +20,10 @@ type Game struct {
 	Rule *datastore.Key
 	MaxPlayer int
 	State int
+}
+func (g *Game) Delete(c appengine.Context, key *datastore.Key) error {
+	err := datastore.Delete(c, key)
+	return err
 }
 
 type Cardset struct {

@@ -64,11 +64,14 @@ var ajax = {
 				ajax.socket.onerror = function() {
 					console.log("socket error")
 				};
+				console.log(ajax.socket);
 				ajax.status = "joined"
 			}
 		})
 	},
 	leave: function() {
+		console.log("leave");
+		ajax.socket.close();
 		$.ajax({
 			url:"/matching",
 			type:"GET",
@@ -83,7 +86,6 @@ var ajax = {
 				console.log("退室時にエラー");
 			},
 			success: function() {
-				ajax.socket.close();
 				ajax.status = "left";
 				ajax.message({id:player.id, content:"update"})
 				console.log("leave");
@@ -127,19 +129,21 @@ var ajax = {
 			},
 			success: function() {
 				console.log("send message");
+				console.log(JSON.stringify(message));
 			}
 		});
 	}
 }
 
 // entry
-$(function() {
+$(document).one("pageload", function() {
 	player.inputName();
 	ajax.join();
 	if(ajax.status == "full") {
 		view.full();
 	} else if(ajax.status == "joined") {
-		$(window).bind("beforeunload", ajax.leave);
+		$("#wait").bind("pagebeforehide", ajax.leave);
+		$("window").bind("unload", ajax.leave);
 		var players = ajax.get();
 		if(players.length == 1) {
 			player.host = true;
