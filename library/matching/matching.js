@@ -27,6 +27,7 @@ var view = {
 		$(":jqmData(role=content)").empty().html("満室のため入室できませんでした。");
 	},
 	hostOnly: function() {
+		$("#start").click(ajax.start);
 		$(".host_only").show();
 	}
 }
@@ -57,10 +58,7 @@ var ajax = {
 				ajax.socket = channel.open();
 				player.id = data.id;
 				console.log(player.id);
-				ajax.socket.onmessage = function() {
-					console.log("get message");
-					view.update(ajax.get());
-				};
+				ajax.socket.onmessage = ajax.onmessage;
 				ajax.socket.onerror = function() {
 					console.log("socket error")
 				};
@@ -68,6 +66,14 @@ var ajax = {
 				ajax.status = "joined"
 			}
 		})
+	},
+	onmessage: function(message) {
+		message = message.data;
+		if(message == "update") {
+			view.update(ajax.get());
+		} else if(message == "start") {
+			location.href = "/play.go?gamekey=" + config.gamekey;
+		}
 	},
 	leave: function() {
 		console.log("leave");
@@ -119,9 +125,10 @@ var ajax = {
 		$.ajax({
 			url: "/message",
 			type: "POST",
+			async: false,
 			data: {
 				gamekey: config.gamekey,
-				"message": JSON.stringify(message)
+				message: JSON.stringify(message)
 			},
 			dataType: "json",
 			error: function() {
@@ -132,6 +139,17 @@ var ajax = {
 				console.log(JSON.stringify(message));
 			}
 		});
+	},
+	start: function() {
+		if(ajax.get().length < config.maxplayer) {
+			alert("人数が足りません");
+		} else {
+			ajax.message({
+				id: player.id,
+				content: "start"
+			});
+			location.href = "/play.go?gamekey=" + config.gamekey;
+		}
 	}
 }
 
