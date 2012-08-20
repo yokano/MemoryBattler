@@ -63,7 +63,9 @@ func Matching(w http.ResponseWriter, r *http.Request, gamekey string, maxplayer 
 		memcache.DeletePlayer(c, client.id)
 
 		if len(memcache.GetPlayers(c)) == 0 {
-			_,err := datastore.DecodeKey(gamekey)
+			key,err := datastore.DecodeKey(gamekey)
+			Check(c, err)
+			err = datastore.Delete(c, key)
 			Check(c, err)
 		}
 	}

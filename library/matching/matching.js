@@ -143,7 +143,7 @@ $(document).one("pageload", function() {
 		view.full();
 	} else if(ajax.status == "joined") {
 		$("#wait").bind("pagebeforehide", ajax.leave);
-		$("window").bind("unload", ajax.leave);
+		$("window").bind("beforeunload", ajax.leave);
 		var players = ajax.get();
 		if(players.length == 1) {
 			player.host = true;
